@@ -1,16 +1,20 @@
-## Hi there 👋
+# Hi, I'm Caius 👋
 
-<!--
-**Notagai/Notagai** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+I'm a software developer who enjoys building **AI-powered tools, web apps, and games**. I like turning ideas into practical projects and experimenting with new technologies.
 
-Here are some ideas to get you started:
+## 📊 GitHub Stats
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Notagai&show_icons=true&hide_border=true&rank_icon=github)
+
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Notagai&layout=compact&hide_border=true)
+
+## 🚀 What I'm Building
+
+- 🤖 AI agents and developer tools
+- 🌐 Web applications and interactive sites
+- 🎮 Games and experiments
+- 📚 Projects for learning and exploration
+
+---
+
+*Always building, learning, and shipping.*
