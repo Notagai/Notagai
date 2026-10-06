@@ -22,7 +22,7 @@ main{flex:1}
 
 /* header */
 .site-header{position:sticky;top:0;z-index:40;padding:22px 0}
-.site-header.scrolled{box-shadow:0 4px 12px rgba(34,26,51,.10)}
+.site-header.scrolled{background:var(--bg);box-shadow:0 4px 12px rgba(34,26,51,.10)}
 .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .wordmark{display:flex;align-items:center;gap:10px;font:700 21px var(--display);letter-spacing:-.03em}
 .wordmark img{width:34px;height:34px;border-radius:50%;border:2px solid var(--ink)}
