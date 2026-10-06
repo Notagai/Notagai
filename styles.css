@@ -140,3 +140,10 @@ h1{font-size:clamp(44px,8vw,88px)}
   .nav-js .tabs a{padding:12px 14px;border-radius:10px}
   .nav-js .tabs .github-link{margin:4px 0 0;text-align:center}
 }
+
+
+/* back to top */
+.back-to-top{position:fixed;right:24px;bottom:24px;z-index:45;padding:10px 16px;border:2px solid var(--ink);border-radius:99px;background:var(--card);color:var(--ink);font:600 14px var(--body);box-shadow:4px 4px 0 var(--shadow);cursor:pointer;transition:transform .12s,box-shadow .12s,background .15s,color .15s}
+.back-to-top:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow);background:var(--accent);color:#fff}
+.back-to-top[hidden]{display:none}
+@media(max-width:760px){.back-to-top{right:16px;bottom:16px}}
