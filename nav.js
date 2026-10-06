@@ -17,5 +17,21 @@
   addEventListener('keydown', e => {
     if (e.key === 'Escape' && nav.classList.contains('open')) { set(false); btn.focus(); }
   });
-  matchMedia('(min-width:761px)').addEventListener('change', e => { if (e.matches) set(false); });
+  matchMedia('(min-width:761px)').addEventListener('change', e => { if (e.matches) set(false); });\n\n  const topButton = document.createElement('button');
+  topButton.className = 'back-to-top';
+  topButton.type = 'button';
+  topButton.textContent = 'Back to top ↑';
+  topButton.setAttribute('aria-label', 'Back to top');
+  topButton.hidden = true;
+  document.body.appendChild(topButton);
+
+  const updateTopButton = () => {
+    topButton.hidden = window.scrollY < 400;
+  };
+
+  addEventListener('scroll', updateTopButton, { passive: true });
+  updateTopButton();
+  topButton.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  });
 })();
