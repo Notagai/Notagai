@@ -103,6 +103,11 @@ h1{font-size:clamp(44px,8vw,88px)}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
 
+/* stack page: lock the desktop viewport so it cannot scroll */
+@media(min-width:761px){
+  body.stack-page{height:100vh;min-height:100vh;overflow:hidden}
+}
+
 /* stack */
 .stack-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:40px}
 .stack-group{padding:24px 26px;background:var(--card);border:2px solid var(--ink);border-radius:var(--r);box-shadow:5px 5px 0 var(--shadow)}
