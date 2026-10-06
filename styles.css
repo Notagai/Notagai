@@ -1,0 +1,142 @@
+/* notagai.dev: taro milk tea palette, Bricolage Grotesque + Plex Mono */
+:root{
+  --bg:#f5f2fb; --card:#fffdff; --ink:#221a33; --muted:#6d6580; --line:#ddd6ec;
+  --accent:#6b4ce6; --accent-soft:#e7e0fc; --pearl:#3b2a24; --shadow:#221a33;
+  --max:1040px; --r:14px;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Inter",ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#17121f; --card:#201a2c; --ink:#efeafa; --muted:#a79fba; --line:#352c47;
+  --accent:#a18bff; --accent-soft:#2c2347; --pearl:#d9c7b8; --shadow:#000;
+}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100dvh;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font:16px/1.65 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+::selection{background:var(--accent);color:#fff}
+.wrap{width:min(calc(100% - 40px),var(--max));margin-inline:auto}
+main{flex:1}
+
+/* header */
+.site-header{padding:22px 0}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.wordmark{display:flex;align-items:center;gap:10px;font:700 21px var(--display);letter-spacing:-.03em}
+.wordmark img{width:34px;height:34px;border-radius:50%;border:2px solid var(--ink)}
+.wordmark .dot{color:var(--accent)}
+.tabs{display:flex;align-items:center;gap:4px;font-size:15px}
+.tabs a{padding:6px 13px;border-radius:99px;transition:background .15s}
+.tabs a:hover{background:var(--accent-soft)}
+.tabs a.active{background:var(--ink);color:var(--bg)}
+.tabs .github-link{margin-left:6px;border:1.5px solid var(--ink)}
+.tabs .github-link:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* type */
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.035em;line-height:1.02;font-weight:700}
+h1{font-size:clamp(44px,8vw,88px)}
+.lede{font-size:clamp(18px,2.2vw,22px);color:var(--muted);max-width:30em;margin:18px 0 0}
+.squiggle{position:relative;white-space:nowrap}
+.squiggle svg{position:absolute;left:0;bottom:-.16em;width:100%;height:.28em;overflow:visible}
+.squiggle path{fill:none;stroke:var(--accent);stroke-width:5;stroke-linecap:round}
+.note{font:13px/1.5 var(--mono);color:var(--muted)}
+
+/* buttons */
+.button{display:inline-block;padding:11px 20px;border:2px solid var(--ink);border-radius:99px;background:var(--accent);color:#fff;font-weight:600;font-size:15px;box-shadow:3px 3px 0 var(--shadow);transition:transform .12s,box-shadow .12s}
+.button:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+.text-link{font-weight:600;border-bottom:2px solid var(--accent);padding-bottom:1px}
+.text-link:hover{color:var(--accent)}
+.actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:32px}
+
+/* home */
+.hero{display:grid;grid-template-columns:1.4fr .6fr;gap:clamp(32px,7vw,96px);align-items:center;padding:clamp(40px,9vh,96px) 0 clamp(32px,6vh,64px)}
+.sticker{justify-self:center;text-align:center;transform:rotate(3deg)}
+.sticker .photo{width:min(220px,50vw);aspect-ratio:1;border-radius:50%;overflow:hidden;border:3px solid var(--ink);box-shadow:7px 7px 0 var(--shadow);background:var(--accent-soft)}
+.sticker img{width:100%;height:100%;object-fit:cover;display:block}
+.sticker .tag{display:inline-block;margin-top:20px;padding:4px 12px;background:var(--accent-soft);border:1.5px solid var(--ink);border-radius:99px;font:13px var(--mono);transform:rotate(-4deg)}
+.recent{padding:8px 0 56px}
+.recent h2{font-size:22px;margin-bottom:16px}
+.recent ul{list-style:none;margin:0;padding:0}
+.recent li a{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-top:1.5px dashed var(--line)}
+.recent li:last-child a{border-bottom:1.5px dashed var(--line)}
+.recent li strong{font-family:var(--display);font-size:20px;letter-spacing:-.02em}
+.recent li span{color:var(--muted);font:13px var(--mono);align-self:center}
+.recent li a:hover strong{color:var(--accent)}
+
+/* work */
+.page{padding:clamp(32px,7vh,72px) 0 72px}
+.page h1{font-size:clamp(44px,7vw,76px)}
+.grid{display:grid;gap:22px;margin-top:40px}
+.project{display:flex;flex-direction:column;gap:12px;padding:26px 28px;background:var(--card);border:2px solid var(--ink);border-radius:var(--r);box-shadow:5px 5px 0 var(--shadow);transition:transform .15s,box-shadow .15s}
+.project:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--accent)}
+.project:nth-child(even){transform:rotate(.25deg)}
+.project:nth-child(even):hover{transform:translate(-2px,-2px) rotate(0)}
+.project-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.project h2{font-size:clamp(26px,3.4vw,34px)}
+.project .go{font:600 14px var(--mono);color:var(--accent);white-space:nowrap}
+.project p{margin:0;color:var(--muted);max-width:60ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chip{padding:2px 11px;font:12.5px var(--mono);background:var(--accent-soft);border-radius:99px}
+.chip.status{background:transparent;border:1.5px dashed var(--muted);color:var(--muted)}
+
+/* about */
+.about{display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(36px,8vw,100px);align-items:start}
+.about p{font-size:18px;color:var(--muted);max-width:34em}
+.about h1{margin-bottom:24px}
+.facts{margin:0;padding:8px 24px;background:var(--card);border:2px solid var(--ink);border-radius:var(--r);box-shadow:5px 5px 0 var(--shadow)}
+.facts div{padding:16px 0;border-bottom:1.5px dashed var(--line)}
+.facts div:last-child{border:0}
+.facts dt{font:12.5px var(--mono);color:var(--muted)}
+.facts dd{margin:2px 0 0;font:600 18px var(--display);letter-spacing:-.01em}
+
+/* footer */
+.footer{display:flex;justify-content:space-between;gap:12px;padding:22px 0 30px;border-top:1.5px dashed var(--line);font:13px var(--mono);color:var(--muted)}
+.footer a:hover{color:var(--accent)}
+
+@media(max-width:760px){
+  .hero,.about{grid-template-columns:1fr}
+  .sticker{order:-1;justify-self:start}
+  .sticker .photo{width:132px;box-shadow:5px 5px 0 var(--shadow)}
+  .project{padding:20px}
+  .project-head{flex-direction:column;gap:4px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+
+/* stack */
+.stack-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:40px}
+.stack-group{padding:24px 26px;background:var(--card);border:2px solid var(--ink);border-radius:var(--r);box-shadow:5px 5px 0 var(--shadow)}
+.stack-group h2{font-size:26px}
+.stack-group>p{margin:6px 0 14px;color:var(--muted);font-size:15px}
+.stack-group ul{list-style:none;margin:0;padding:0}
+.stack-group li{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1.5px dashed var(--line)}
+.stack-group li strong{font:600 17px var(--display);letter-spacing:-.01em}
+.stack-group li span{font:12.5px var(--mono);color:var(--muted);text-align:right;align-self:center}
+@media(max-width:760px){.stack-grid{grid-template-columns:1fr}}
+
+/* overlay scrollbar (drawn by scrollbar.js; native one is hidden so the page never shifts) */
+.custom-scroll{scrollbar-width:none}
+.custom-scroll::-webkit-scrollbar{display:none}
+.scrollbar{position:fixed;top:0;right:0;bottom:0;width:16px;z-index:50;opacity:0;transition:opacity .25s}
+.scrollbar[hidden]{display:none}
+.scrollbar.on,.scrollbar:hover{opacity:1}
+.scrollbar-thumb{position:absolute;top:0;right:3px;width:7px;border-radius:99px;background:var(--ink);opacity:.45;transition:width .12s,opacity .12s,background .12s}
+.scrollbar:hover .scrollbar-thumb{width:10px;opacity:.7}
+.scrollbar.dragging .scrollbar-thumb{width:10px;opacity:1;background:var(--accent)}
+
+/* mobile menu (hamburger). Without JS the links just wrap under the logo. */
+.nav-toggle{display:none;width:44px;height:44px;padding:0;border:2px solid var(--ink);border-radius:50%;background:var(--card);color:var(--ink);cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.nav-toggle span{display:block;width:18px;height:2px;border-radius:2px;background:currentColor;transition:transform .2s,opacity .2s}
+.nav-toggle[aria-expanded="true"]{background:var(--accent);border-color:var(--ink);color:#fff}
+.nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:760px){
+  .nav{flex-wrap:wrap;position:relative}
+  .tabs{flex-wrap:wrap}
+  .nav-js .nav-toggle{display:flex}
+  .nav-js .tabs{display:none;position:absolute;z-index:40;top:calc(100% + 12px);left:0;right:0;flex-direction:column;align-items:stretch;gap:4px;padding:10px;background:var(--card);border:2px solid var(--ink);border-radius:var(--r);box-shadow:5px 5px 0 var(--shadow);font-size:17px}
+  .nav-js .tabs.open{display:flex}
+  .nav-js .tabs a{padding:12px 14px;border-radius:10px}
+  .nav-js .tabs .github-link{margin:4px 0 0;text-align:center}
+}
