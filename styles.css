@@ -106,6 +106,7 @@ h1{font-size:clamp(44px,8vw,88px)}
 /* stack page: lock the desktop viewport so it cannot scroll */
 @media(min-width:761px){
   body.stack-page{height:100vh;min-height:100vh;overflow:hidden}
+  body.stack-page .page{padding-bottom:24px}
 }
 
 /* stack */
