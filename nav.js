@@ -17,7 +17,9 @@
   addEventListener('keydown', e => {
     if (e.key === 'Escape' && nav.classList.contains('open')) { set(false); btn.focus(); }
   });
-  matchMedia('(min-width:761px)').addEventListener('change', e => { if (e.matches) set(false); });\n\n  const topButton = document.createElement('button');
+  matchMedia('(min-width:761px)').addEventListener('change', e => { if (e.matches) set(false); });
+
+  const topButton = document.createElement('button');
   topButton.className = 'back-to-top';
   topButton.type = 'button';
   topButton.textContent = 'Back to top ↑';
