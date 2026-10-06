@@ -27,11 +27,20 @@
   topButton.hidden = true;
   document.body.appendChild(topButton);
 
+  const header = document.querySelector('.site-header');
+  const updateHeader = () => {
+    header?.classList.toggle('scrolled', window.scrollY > 0);
+  };
+
   const updateTopButton = () => {
     topButton.hidden = window.scrollY < 400;
   };
 
-  addEventListener('scroll', updateTopButton, { passive: true });
+  addEventListener('scroll', () => {
+    updateHeader();
+    updateTopButton();
+  }, { passive: true });
+  updateHeader();
   updateTopButton();
   topButton.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
