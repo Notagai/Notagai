@@ -1,6 +1,6 @@
 # Hi, I'm Caius 👋
 
-I'm a software developer who builds **AI-powered tools, web apps, and games**. I like turning ideas into practical projects and experimenting with new technologies.
+I'm a student software developer who builds **AI-powered tools, web apps, and games**. I like turning ideas into practical projects and experimenting with new technologies.
 
 ## 📊 GitHub Stats
 
