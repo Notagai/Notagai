@@ -1,4 +1,4 @@
-notagai.com
+https://www.notagai.com
 
 
 ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Notagai&show_icons=true&hide_border=true&rank_icon=github)
