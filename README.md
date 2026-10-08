@@ -1,7 +1,7 @@
 I'm a student software developer who builds **AI-powered tools, web apps, and games**. I like turning ideas into practical projects and experimenting with new technologies.
 notagai.com
 
-** GitHub Stats
+**GitHub Stats
 
 ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Notagai&show_icons=true&hide_border=true&rank_icon=github)
 
