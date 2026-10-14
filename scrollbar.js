@@ -9,6 +9,9 @@
   const thumb = document.createElement('div');
   bar.className = 'scrollbar';
   thumb.className = 'scrollbar-thumb';
+  // the thumb is a vertical squiggle; the path runs one wavelength (40 units)
+  // past each end so the downward flow animation loops seamlessly
+  thumb.innerHTML = '<svg viewBox="0 0 12 200" preserveAspectRatio="none" aria-hidden="true"><path d="M6 -40 Q 10 -30 6 -20 T 6 0 T 6 20 T 6 40 T 6 60 T 6 80 T 6 100 T 6 120 T 6 140 T 6 160 T 6 180 T 6 200 T 6 220 T 6 240"/></svg>';
   bar.setAttribute('aria-hidden', 'true');
   bar.append(thumb);
   document.body.append(bar);
