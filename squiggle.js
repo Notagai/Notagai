@@ -1,8 +1,7 @@
 /* Squiggle underlines.
    Every `.squiggle` draws itself in when it scrolls into view, then keeps a
-   gentle barber-pole swell travelling along it. Heading squiggles also flatten
-   under the pointer and ripple back as it moves away. The About page keeps the
-   idle motion but is excluded from the pointer reaction. */
+   gentle barber-pole swell travelling along it. They all flatten under the
+   pointer and ripple back as it moves away, on every page. */
 (() => {
   const spans = Array.from(document.querySelectorAll('.squiggle'))
     .filter(s => s.querySelector('svg path'));
@@ -41,7 +40,6 @@
       n,
       x0: 3,
       step: (W - 6) / n,
-      adaptive: !span.closest('.about'),
       amps: new Array(n).fill(FULL),
       mouse: new Array(n).fill(1),     // 1 = full bump, 0 = flattened under pointer
       visible: true,
@@ -66,12 +64,11 @@
     items.forEach(it => it.span.classList.add('sq-js', 'in'));
   }
 
-  // --- cursor adaptation (headings only) -------------------------------
-  const adaptive = items.filter(it => it.adaptive);
-  if (fine && adaptive.length) {
+  // --- cursor adaptation ----------------------------------------------
+  if (fine && items.length) {
     addEventListener('pointermove', e => {
       const px = e.clientX, py = e.clientY;
-      for (const it of adaptive) {
+      for (const it of items) {
         const r = it.span.getBoundingClientRect();
         if (!r.width) continue;
         const near = px > r.left - 80 && px < r.right + 80 && py > r.top - 70 && py < r.bottom + 70;
@@ -83,8 +80,8 @@
         }
       }
     }, { passive: true });
-    addEventListener('mouseout', e => { if (!e.relatedTarget) adaptive.forEach(it => it.mouse.fill(1)); });
-    addEventListener('blur', () => adaptive.forEach(it => it.mouse.fill(1)));
+    addEventListener('mouseout', e => { if (!e.relatedTarget) items.forEach(it => it.mouse.fill(1)); });
+    addEventListener('blur', () => items.forEach(it => it.mouse.fill(1)));
   }
 
   // --- idle + interaction animation ------------------------------------

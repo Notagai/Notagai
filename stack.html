@@ -1,82 +1,124 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Stack · Notagai</title>
-<meta name="description" content="The languages, tools, and platforms Notagai builds with.">
-<meta name="theme-color" content="#f5f2fb">
-<meta property="og:title" content="Stack · Notagai">
-<meta property="og:description" content="The languages, tools, and platforms Notagai builds with.">
-<script>document.documentElement.classList.add("nav-js")</script>
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<script src="scrollbar.js" defer></script>
-<script src="nav.js" defer></script>
-<script src="squiggle.js" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Stack · Notagai</title>
+  <meta name="description" content="The languages, tools, and platforms Notagai builds with.">
+  <meta name="theme-color" content="#f5f2fb">
+  <meta property="og:title" content="Stack · Notagai">
+  <meta property="og:description" content="The languages, tools, and platforms Notagai builds with.">
+  <script>document.documentElement.classList.add("nav-js", "stack-js")</script>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono&family=Inter:wght@400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="scrollbar.js" defer></script>
+  <script src="nav.js" defer></script>
+  <script src="squiggle.js" defer></script>
+  <script src="stack-tabs.js" defer></script>
 </head>
+
 <body class="stack-page">
-<header class="site-header">
-  <div class="wrap nav">
-    <a class="wordmark" href="home.html" aria-label="Notagai home">
-      <img src="https://avatars.githubusercontent.com/u/89167930?v=4" alt="">
-      <span>notagai<span class="dot">.</span></span>
-    </a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span></span><span></span><span></span></button>
-    <nav class="tabs" id="site-nav" aria-label="Main">
-      <a href="home.html">Home</a>
-      <a href="work.html">Work</a>
-      <a href="stack.html" class="active" aria-current="page">Stack</a>
-      <a href="about.html">About</a>
-      <a class="github-link" href="https://github.com/Notagai">GitHub ↗</a>
-    </nav>
-  </div>
-</header>
-<main class="wrap page">
-  <h1>My <span class="squiggle">tech stack<svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M3 7 Q 18 1 33 7 T 63 7 T 93 7 T 123 7 T 153 7 T 197 6"/></svg></span></h1>
-  <p class="lede">The tools I reach for and the projects that use them.</p>
-  <div class="stack-grid">
-    <section class="stack-group">
-      <h2>Desktop</h2>
-      <p>Windows apps with real features behind them.</p>
-      <ul>
-      <li><strong>C# / .NET</strong><span>Ballknower, OpenToDo</span></li>
-      <li><strong>WPF</strong><span>Ballknower</span></li>
-      <li><strong>Avalonia UI</strong><span>OpenToDo</span></li>
-      </ul>
-    </section>
-    <section class="stack-group">
-      <h2>Web and games</h2>
-      <p>Browser games with no framework in the way.</p>
-      <ul>
-      <li><strong>JavaScript</strong><span>All projects have documentation sites</span></li>
-      <li><strong>HTML</strong><span>All projects have documentation sites</span></li>
-      <li><strong>CSS</strong><span>All projects have documentation sites</span></li>
-      </ul>
-    </section>
-    <section class="stack-group">
-      <h2>Integrations</h2>
-      <p>Connecting projects to things people already use.</p>
-      <ul>
-      <li><strong>AI assistants & APIs</strong><span>Ballknower, OpenToDo</span></li>
-      <li><strong>Google integrations</strong><span>Ballknower, OpenToDo</span></li>
-      </ul>
-    </section>
-    <section class="stack-group">
-      <h2>Home base</h2>
-      <p>Where the code lives and this site is served from.</p>
-      <ul>
-      <li><strong>Git and GitHub</strong><span>Every project</span></li>
-      <li><strong>Web deployment</strong><span>Web projects under my Cloudflare domain</span></li>
-      <li><strong>Cross-platform desktop</strong><span>OpenToDo</span></li>
-      </ul>
-    </section>
-  </div>
-</main>
-<footer class="wrap footer">
-  <span>© 2026 Notagai</span>
-  <a href="https://github.com/Notagai">github.com/Notagai</a>
-</footer>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="wordmark" href="home.html" aria-label="Notagai home">
+        <img src="https://avatars.githubusercontent.com/u/89167930?v=4" alt="">
+        <span class="squiggle wm-squiggle">notagai<span class="dot">.</span><svg viewBox="0 0 200 12"
+            preserveAspectRatio="none" aria-hidden="true">
+            <path d="M3 7 Q 18 1 33 7 T 63 7 T 93 7 T 123 7 T 153 7 T 197 6" />
+          </svg></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"
+        aria-label="Open menu"><span></span><span></span><span></span></button>
+      <nav class="tabs" id="site-nav" aria-label="Main">
+        <a href="home.html">Home</a>
+        <a href="work.html">Work</a>
+        <a href="stack.html" class="active" aria-current="page">Stack</a>
+        <a href="about.html">About</a>
+        <a class="github-link" href="https://github.com/Notagai" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap page">
+    <h1>My <span class="squiggle">tech stack<svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M3 7 Q 18 1 33 7 T 63 7 T 93 7 T 123 7 T 153 7 T 197 6" />
+        </svg></span></h1>
+    <p class="lede">My preferred technologies and tools and proof of use.</p>
+
+    <div class="stack-shell">
+      <div class="stack-rail" role="tablist" aria-label="Tech stack" aria-orientation="vertical">
+        <button class="stack-tab" type="button" role="tab" id="stack-tab-1" aria-selected="true"
+          aria-controls="stack-panel-1" tabindex="0">
+          <span class="stack-tab-index" aria-hidden="true">01</span>
+          <span class="stack-tab-title">Desktop</span>
+          <span class="stack-tab-count"></span>
+        </button>
+        <button class="stack-tab" type="button" role="tab" id="stack-tab-2" aria-selected="false"
+          aria-controls="stack-panel-2" tabindex="-1">
+          <span class="stack-tab-index" aria-hidden="true">02</span>
+          <span class="stack-tab-title">Web and games</span>
+          <span class="stack-tab-count"></span>
+        </button>
+        <button class="stack-tab" type="button" role="tab" id="stack-tab-3" aria-selected="false"
+          aria-controls="stack-panel-3" tabindex="-1">
+          <span class="stack-tab-index" aria-hidden="true">03</span>
+          <span class="stack-tab-title">Integrations</span>
+          <span class="stack-tab-count"></span>
+        </button>
+        <button class="stack-tab" type="button" role="tab" id="stack-tab-4" aria-selected="false"
+          aria-controls="stack-panel-4" tabindex="-1">
+          <span class="stack-tab-index" aria-hidden="true">04</span>
+          <span class="stack-tab-title">Home base</span>
+          <span class="stack-tab-count"></span>
+        </button>
+      </div>
+
+      <div class="stack-panels">
+        <section class="stack-panel is-active" id="stack-panel-1" role="tabpanel" aria-labelledby="stack-tab-1"
+          tabindex="0">
+          <p>Windows apps with real features behind them.</p>
+          <ul>
+            <li><strong>C# / .NET</strong><span>Ballknower, OpenToDo</span></li>
+            <li><strong>WPF</strong><span>Ballknower</span></li>
+            <li><strong>Avalonia UI</strong><span>OpenToDo</span></li>
+          </ul>
+        </section>
+        <section class="stack-panel" id="stack-panel-2" role="tabpanel" aria-labelledby="stack-tab-2" tabindex="0">
+          <p>Browser games with no framework in the way.</p>
+          <ul>
+            <li><strong>JavaScript</strong><span>All projects have documentation sites</span></li>
+            <li><strong>HTML</strong><span>All projects have documentation sites</span></li>
+            <li><strong>CSS</strong><span>All projects have documentation sites</span></li>
+          </ul>
+        </section>
+        <section class="stack-panel" id="stack-panel-3" role="tabpanel" aria-labelledby="stack-tab-3" tabindex="0">
+          <p>Connecting projects to things people already use.</p>
+          <ul>
+            <li><strong>AI assistants &amp; APIs</strong><span>Ballknower, OpenToDo</span></li>
+            <li><strong>Google integrations</strong><span>Ballknower, OpenToDo</span></li>
+            <li><strong>Windows API integration</strong><span>Desktype</span></li>
+          </ul>
+        </section>
+        <section class="stack-panel" id="stack-panel-4" role="tabpanel" aria-labelledby="stack-tab-4" tabindex="0">
+          <p>Where the code lives and this site is served from.</p>
+          <ul>
+            <li><strong>Git and GitHub</strong><span>Every project</span></li>
+            <li><strong>Web deployment</strong><span>Most projects have sites</span></li>
+            <li><strong>Desktop deployment</strong><span>OpenToDo, Desktype, Ballknower</span></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="wrap footer">
+    <span>© 2026 Notagai</span>
+    <a href="https://github.com/Notagai" target="_blank" rel="noopener noreferrer">github.com/Notagai</a>
+  </footer>
 </body>
+
 </html>

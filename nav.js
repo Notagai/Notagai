@@ -24,7 +24,7 @@
   topButton.type = 'button';
   topButton.textContent = 'Back to top ↑';
   topButton.setAttribute('aria-label', 'Back to top');
-  topButton.hidden = true;
+  // visibility is a class so the button can fade/rise in instead of popping
   document.body.appendChild(topButton);
 
   const header = document.querySelector('.site-header');
@@ -33,7 +33,7 @@
   };
 
   const updateTopButton = () => {
-    topButton.hidden = window.scrollY < 400;
+    topButton.classList.toggle('show', window.scrollY >= 400);
   };
 
   addEventListener('scroll', () => {
