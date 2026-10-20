@@ -1,40 +1,57 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="intro-html">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Notagai</title>
-<meta name="description" content="Notagai: student developer building software, games, and experiments.">
-<meta name="theme-color" content="#f5f2fb">
-<meta property="og:title" content="Notagai">
-<meta property="og:description" content="Notagai: student developer building software, games, and experiments.">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<link rel="prefetch" href="home.html">
-<script src="scrollbar.js" defer></script>
-<script src="intro.js" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Notagai</title>
+  <meta name="description" content="Notagai: student developer building software, games, and experiments.">
+  <meta name="theme-color" content="#f5f2fb">
+  <meta property="og:title" content="Notagai">
+  <meta property="og:description" content="Notagai: student developer building software, games, and experiments.">
+  <script>document.documentElement.classList.add("intro-js")</script>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono&family=Inter:wght@400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="prefetch" href="home.html">
+  <script src="intro.js" defer></script>
+  <script src="bujiji.js" defer></script>
 </head>
+
 <body class="intro-page">
-<main class="intro" id="intro">
-  <div class="intro-bg" aria-hidden="true">
-    <span class="blob b1"></span>
-    <span class="blob b2"></span>
-    <span class="blob b3"></span>
-  </div>
-  <div class="intro-stage">
-    <h1 class="intro-word">
-      <span class="sr-only">notagai.</span>
-      <span class="intro-letters" aria-hidden="true"><span style="--i:0">n</span><span style="--i:1">o</span><span style="--i:2">t</span><span style="--i:3">a</span><span style="--i:4">g</span><span style="--i:5">a</span><span style="--i:6">i</span><span class="dot" style="--i:7">.</span></span>
-    </h1>
-    <svg class="intro-squiggle" viewBox="0 0 200 12" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-      <path class="track" d="M3 7 Q 18 1 33 7 T 63 7 T 93 7 T 123 7 T 153 7 T 197 6"/>
-      <path class="draw" pathLength="100" d="M3 7 Q 18 1 33 7 T 63 7 T 93 7 T 123 7 T 153 7 T 197 6"/>
-    </svg>
-    <p class="intro-sub">student developer · software, games, experiments</p>
-    <div class="intro-cue" aria-hidden="true"><span class="arrow">↓</span> scroll to enter</div>
-    <a class="intro-skip" href="home.html">Skip intro</a>
-  </div>
-</main>
+  <main class="intro" id="intro">
+    <div class="intro-bg" aria-hidden="true">
+      <span class="blob b1"></span>
+      <span class="blob b2"></span>
+      <span class="blob b3"></span>
+    </div>
+    <div class="intro-stage">
+      <h1 class="intro-word">
+        <span class="sr-only">notagai.</span>
+        <span class="intro-letters" aria-hidden="true"><span style="--i:0">n</span><span style="--i:1">o</span><span
+            style="--i:2">t</span><span style="--i:3">a</span><span style="--i:4">g</span><span
+            style="--i:5">a</span><span style="--i:6">i</span><span class="dot" style="--i:7">.</span></span>
+      </h1>
+      <svg class="intro-squiggle" viewBox="0 0 200 12" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <path class="track" d="M3 7 Q 18 1 33 7 T 63 7 T 93 7 T 123 7 T 153 7 T 197 6" />
+        <path class="draw" pathLength="100" d="M3 7 Q 18 1 33 7 T 63 7 T 93 7 T 123 7 T 153 7 T 197 6" />
+      </svg>
+      <div class="intro-term" aria-hidden="true">
+        <div class="intro-term-bar">
+          <span class="intro-dots"><i></i><i></i><i></i></span>
+          <span class="intro-term-title">notagai — zsh</span>
+        </div>
+        <p class="intro-term-line"><span class="intro-prompt">$</span><span class="intro-term-cmd">apt update &amp;&amp; apt install notagai</span><span class="intro-caret"></span></p>
+        <p class="intro-term-note"><span class="intro-tick">✓</span>12 packages installed · 0.42s</p>
+      </div>
+      <div class="intro-cue" aria-hidden="true"><span class="arrow">↓</span> scroll to enter <span class="arrow">↓</span></div>
+      <a class="intro-skip" href="home.html">Skip intro</a>
+    </div>
+  </main>
 </body>
+
 </html>

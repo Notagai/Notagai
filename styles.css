@@ -27,6 +27,10 @@ main{flex:1}
 .wordmark{display:flex;align-items:center;gap:10px;font:700 21px var(--display);letter-spacing:-.03em}
 .wordmark img{width:34px;height:34px;border-radius:50%;border:2px solid var(--ink)}
 .wordmark .dot{color:var(--accent)}
+/* the wordmark carries its own squiggle (drawn and animated by squiggle.js) */
+.wm-squiggle{display:inline-block;line-height:1.05}   /* keeps the squiggle tight under the text */
+.wm-squiggle svg{bottom:-.14em;height:.24em}
+.wm-squiggle path{stroke-width:4.5}
 .tabs{display:flex;align-items:center;gap:4px;font-size:15px}
 .tabs a{padding:6px 13px;border-radius:99px;transition:background .15s}
 .tabs a:hover{background:transparent;box-shadow:0 0 20px var(--glow),0 0 0 1px var(--accent-soft);text-shadow:0 0 12px var(--glow)}
@@ -89,6 +93,167 @@ h1{font-size:clamp(44px,8vw,88px)}
 .chip{padding:2px 11px;font:12.5px var(--mono);background:var(--accent-soft);border-radius:99px}
 .chip.status{background:transparent;border:1.5px dashed var(--muted);color:var(--muted)}
 
+/* projects deck: a normal list on phones, a fanned hand of cards on desktop */
+.deck-wrap{margin-top:40px}
+.deck{display:grid;gap:22px}
+.deck-cue,.deck-hint{display:none}
+.deck-more{text-align:center;margin:40px 0 0;color:var(--muted);font:13px var(--mono)}
+.deck-random{display:none}
+.deck-hatch{display:none}
+
+@media(min-width:761px){
+  /* The work page becomes a single screen: the wheel turns instead of the page,
+     so nothing can scroll the deck out of view and no scrollbar gutter shows. */
+  body.deck-locked{height:100dvh;overflow:hidden}
+  body.deck-locked main.page{
+    position:relative;display:flex;flex-direction:column;flex:1;min-height:0;
+    width:100%;max-width:none;margin:0;padding:0;overflow:hidden;
+  }
+  /* The heading keeps its normal place at the top of the page... */
+  body.deck-locked .work-head{
+    position:relative;z-index:5;flex:none;pointer-events:none;
+    width:min(calc(100% - 40px),var(--max));
+    margin:clamp(32px,7vh,72px) auto 0;
+  }
+  /* the head floats over the wheel, so only its button takes the pointer */
+  body.deck-locked .deck-random{
+    display:inline-block;margin-top:18px;pointer-events:auto;
+    padding:10px 20px;border:2px solid var(--ink);border-radius:99px;
+    background:var(--card);color:var(--ink);font:600 14px var(--body);
+    box-shadow:3px 3px 0 var(--shadow);cursor:pointer;
+    transition:transform .12s,box-shadow .12s,background .15s,color .15s;
+  }
+  body.deck-locked .deck-random:hover{
+    transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow);
+    background:var(--accent);color:#fff;
+  }
+  /* ...and the wheel takes the whole screen behind it, exactly as before, so
+     the cards get the full height instead of only the space under the head. */
+  .deck-wrap.deck-wide{
+    position:absolute;inset:0;width:auto;height:100%;
+    margin:0;padding:0;display:flex;flex-direction:column;
+    overflow:hidden;overflow:clip;isolation:isolate;
+  }
+  body.deck-locked .deck-more{
+    position:absolute;left:max(20px,calc((100% - var(--max)) / 2));
+    bottom:clamp(12px,2.6vh,26px);
+    margin:0;text-align:left;z-index:5;
+  }
+  .deck-live{
+    position:relative;display:block;counter-reset:card;height:100%;
+    flex:1;min-height:0;
+    /* The ring's centre sits beyond the right edge; this box is the window
+       that cards slide in and out of as the wheel turns. */
+    overflow:hidden;
+    overflow:clip;
+    /* Keep the cards' z-indexes inside the stage so they never climb over
+       the sticky header. */
+    isolation:isolate;
+  }
+  /* dashed outline of the slot a pulled-out card occupies */
+  .deck-slot{
+    position:absolute;left:0;top:0;z-index:1;pointer-events:none;
+    border:2px dashed var(--line);border-radius:var(--r);
+    transform:translate3d(var(--ax,0px),var(--ay,0px),0) scale(1.08);
+    opacity:0;transition:opacity .3s ease;
+  }
+  .deck-live:not(.has-active) .deck-slot{opacity:.85}
+  /* the page's corner hatching, laid over the cards as they pass it */
+  .deck-hatch{
+    display:block;position:absolute;inset:0;z-index:200;pointer-events:none;
+    background:repeating-linear-gradient(135deg,var(--line) 0 1.2px,transparent 1.2px 12px);
+    -webkit-mask-image:radial-gradient(80% 80% at 100% 100%,#000 0,rgba(0,0,0,.5) 15%,transparent 32%);
+    mask-image:radial-gradient(80% 80% at 100% 100%,#000 0,rgba(0,0,0,.5) 15%,transparent 32%);
+    opacity:.85;
+  }
+  .deck-live .deck-card{
+    counter-increment:card;
+    position:absolute;left:0;top:0;
+    width:clamp(380px,40vw,560px);height:clamp(240px,25vh,290px);margin:0;padding:18px 28px 48px;overflow:hidden;
+    z-index:var(--z,1);
+    transform-origin:50% 50%;
+    transform:translate3d(var(--bx,0px),var(--by,0px),0) rotate(var(--br,0deg)) scale(1);
+    opacity:var(--o,1);
+    transition:transform .55s cubic-bezier(.16,1,.3,1),box-shadow .4s ease,border-color .3s ease,opacity .3s ease;
+    will-change:transform;cursor:pointer;user-select:none;
+    backface-visibility:hidden;
+  }
+  .deck-live .deck-card p{font-size:14px;line-height:1.45}
+  .deck-live .deck-card::before{
+    content:counter(card,decimal-leading-zero);
+    position:absolute;bottom:15px;right:34px;
+    font:11px var(--mono);color:var(--muted);opacity:.5;
+  }
+  .deck-live .deck-card:hover:not(.is-active){
+    z-index:110;
+    /* lift and straighten toward the pointer, keeping the card under it */
+    transform:translate3d(var(--bx,0px),calc(var(--by,0px) - 10px),0) rotate(var(--bh,0deg)) scale(1.035);
+    box-shadow:9px 11px 0 var(--accent),0 26px 55px rgba(34,26,51,.18);
+    transition-duration:.28s,.35s,.3s;
+    user-select:text;
+  }
+  .deck-live .deck-card:focus-visible:not(.is-active){
+    z-index:110;
+    transform:translate3d(var(--bx,0px),calc(var(--by,0px) - 10px),0) rotate(var(--bh,0deg)) scale(1.035);
+    box-shadow:9px 11px 0 var(--accent),0 26px 55px rgba(34,26,51,.18);
+  }
+  .deck-live .deck-card.is-active{
+    z-index:100;opacity:1;
+    /* pulled clean out of the hand and squared up in the middle of the view */
+    transform:translate3d(var(--ax,0px),var(--ay,0px),0) rotate(0deg) scale(1.08);
+    border-color:var(--accent);
+    box-shadow:10px 12px 0 var(--accent),0 32px 80px rgba(34,26,51,.24);
+    transition-duration:.8s,.5s,.3s;
+    user-select:text;
+  }
+  /* While the wheel is moving, positions are updated every frame; transitions
+     on top of that would make the cards lag behind the ring. */
+  .deck-live.is-spinning .deck-card,
+  .deck-live.is-spinning .deck-card:hover:not(.is-active),
+  .deck-live.is-spinning .deck-card:focus-visible:not(.is-active){transition:none}
+  /* the card under the pointer still eases into its lifted state while the
+     wheel coasts, instead of being highlighted in one frame */
+  .deck-live.is-spinning .deck-card:hover:not(.is-active),
+  .deck-live.is-spinning .deck-card:focus-visible:not(.is-active){
+    transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .35s ease,border-color .3s ease;
+  }
+  .deck-live .deck-cue{
+    display:block;position:absolute;left:34px;right:34px;bottom:16px;padding-top:9px;
+    border-top:1.5px dashed var(--line);
+    font:11.5px var(--mono);color:var(--accent);
+    opacity:0;transform:translateY(6px);
+    transition:opacity .3s ease .12s,transform .3s ease .12s;
+  }
+  .deck-live .deck-card.is-active .deck-cue{opacity:1;transform:none}
+  /* Brief pause after a pull-out so the pointer does not immediately grab
+     whichever card has slid underneath it while the active one flies away. */
+  .deck-live.hover-lock .deck-card:not(.is-active){pointer-events:none}
+  .deck-live .deck-card:focus-visible{outline-offset:6px}
+  /* The hint lives in the free left column, clear of the fan. */
+  .deck-live + .deck-hint{
+    position:absolute;left:max(20px,calc((100% - var(--max)) / 2));bottom:clamp(46px,7vh,80px);
+    display:flex;flex-direction:column;align-items:flex-start;gap:5px;
+    margin:0;font:12px var(--mono);color:var(--muted);text-align:left;
+    pointer-events:none;
+  }
+  .deck-live + .deck-hint span{display:inline-flex;align-items:center;gap:8px}
+  .deck-live + .deck-hint span+span::before{content:none}
+}
+
+/* cursor-following label for a hovered card */
+.deck-tip{
+  position:fixed;left:0;top:0;z-index:120;pointer-events:none;
+  display:flex;flex-direction:column;gap:1px;padding:8px 13px;border-radius:10px;
+  background:var(--ink);color:var(--bg);box-shadow:0 10px 26px rgba(34,26,51,.25);
+  opacity:0;transform:translate3d(-999px,-999px,0);transition:opacity .16s ease;
+  white-space:nowrap;
+}
+.deck-tip.on{opacity:1}
+.deck-tip b{font:600 13.5px var(--body);letter-spacing:-.01em}
+.deck-tip small{font:10.5px var(--mono);letter-spacing:.02em;opacity:.62}
+@media(max-width:760px){.deck-tip{display:none}}
+@media(prefers-reduced-motion:reduce){.deck-live .deck-card{transition:none}}
+
 /* about */
 .about{display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(36px,8vw,100px);align-items:start}
 .about p{font-size:18px;color:var(--muted);max-width:34em}
@@ -118,16 +283,77 @@ h1{font-size:clamp(44px,8vw,88px)}
   body.stack-page .page{padding-bottom:24px}
 }
 
-/* stack */
-.stack-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:40px}
-.stack-group{padding:24px 26px;background:var(--card);border:2px solid var(--ink);border-radius:var(--r);box-shadow:5px 5px 0 var(--shadow)}
-.stack-group h2{font-size:26px}
-.stack-group>p{margin:6px 0 14px;color:var(--muted);font-size:15px}
-.stack-group ul{list-style:none;margin:0;padding:0}
-.stack-group li{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1.5px dashed var(--line)}
-.stack-group li strong{font:600 17px var(--display);letter-spacing:-.01em}
-.stack-group li span{font:12.5px var(--mono);color:var(--muted);text-align:right;align-self:center}
-@media(max-width:760px){.stack-grid{grid-template-columns:1fr}}
+/* stack: a rail of tabs; the matching section pulls out beside them */
+.stack-shell{
+  display:grid;grid-template-columns:clamp(190px,26%,250px) minmax(0,1fr);
+  gap:22px;align-items:start;margin-top:38px;
+}
+.stack-rail{display:flex;flex-direction:column;gap:10px}
+.stack-tab{
+  position:relative;display:flex;align-items:center;gap:12px;width:100%;
+  padding:14px 16px;text-align:left;
+  background:var(--card);color:var(--ink);
+  border:2px solid var(--ink);border-radius:var(--r);
+  box-shadow:4px 4px 0 var(--shadow);cursor:pointer;
+  transition:transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease,background .2s ease,color .2s ease;
+}
+.stack-tab:hover{transform:translateX(-4px);box-shadow:7px 4px 0 var(--accent)}
+.stack-tab[aria-selected="true"]{
+  background:var(--accent);color:#fff;
+  transform:translateX(-8px);
+  box-shadow:8px 5px 0 var(--shadow);
+}
+.stack-tab[aria-selected="true"]:hover{transform:translateX(-8px)}
+.stack-tab-index{
+  flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;
+  border:1.5px solid currentColor;font:11.5px var(--mono);
+}
+.stack-tab-title{font:700 clamp(17px,1.9vw,20px)/1.15 var(--display);letter-spacing:-.02em}
+.stack-tab-count{margin-left:auto;font:11px var(--mono);color:var(--muted);white-space:nowrap}
+.stack-tab-count:empty{display:none}
+.stack-tab[aria-selected="true"] .stack-tab-count{color:rgba(255,255,255,.72)}
+
+.stack-panels{min-width:0}
+.stack-panel{
+  display:none;padding:24px 26px;
+  background:var(--card);border:2px solid var(--ink);border-radius:var(--r);
+  box-shadow:5px 5px 0 var(--shadow);
+}
+.stack-panel.is-active{
+  display:block;
+  animation:stackPullOut .5s cubic-bezier(.16,1,.3,1) both;
+}
+/* the section slides out from behind the rail instead of dropping down */
+@keyframes stackPullOut{
+  from{opacity:0;transform:translate3d(-30px,0,0)}
+  to{opacity:1;transform:none}
+}
+.stack-panel p{margin:0 0 14px;color:var(--muted);font-size:15px}
+.stack-panel ul{list-style:none;margin:0;padding:0}
+.stack-panel li{
+  display:flex;justify-content:space-between;gap:16px;padding:11px 0;
+  border-top:1.5px dashed var(--line);
+}
+.stack-panel li:first-child{border-top:0}
+.stack-panel li strong{font:600 17px var(--display);letter-spacing:-.01em}
+.stack-panel li span{font:12.5px var(--mono);color:var(--muted);text-align:right;align-self:center}
+
+/* without JS every section is simply laid out in place */
+html:not(.stack-js) .stack-panel{display:block;margin-bottom:16px}
+@media(prefers-reduced-motion:reduce){.stack-panel.is-active{animation:none}}
+@media(max-width:760px){
+  .stack-shell{display:block}
+  .stack-rail{flex-direction:row;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .stack-tab{width:auto;padding:10px 14px;border-radius:99px;box-shadow:3px 3px 0 var(--shadow)}
+  .stack-tab:hover{transform:translateY(-2px);box-shadow:4px 5px 0 var(--accent)}
+  .stack-tab[aria-selected="true"],
+  .stack-tab[aria-selected="true"]:hover{transform:translateY(-2px)}
+  .stack-tab-index{width:26px;height:26px;font-size:10.5px}
+  .stack-tab-count{display:none}
+  .stack-panel{padding:18px 18px 20px}
+  .stack-panel li{flex-direction:column;gap:2px}
+  .stack-panel li span{text-align:left}
+}
 
 /* overlay scrollbar (drawn by scrollbar.js; native one is hidden so the page never shifts) */
 .custom-scroll{scrollbar-width:none}
@@ -152,17 +378,26 @@ h1{font-size:clamp(44px,8vw,88px)}
   .nav{flex-wrap:wrap;position:relative}
   .tabs{flex-wrap:wrap}
   .nav-js .nav-toggle{display:flex}
-  .nav-js .tabs{display:none;position:absolute;z-index:40;top:calc(100% + 12px);left:0;right:0;flex-direction:column;align-items:stretch;gap:4px;padding:10px;background:var(--card);border:2px solid var(--ink);border-radius:var(--r);box-shadow:5px 5px 0 var(--shadow);font-size:17px}
-  .nav-js .tabs.open{display:flex}
+  /* the menu slides out of the header instead of snapping open */
+  .nav-js .tabs{
+    position:absolute;z-index:40;top:calc(100% + 12px);left:0;right:0;
+    flex-direction:column;align-items:stretch;gap:4px;padding:10px;
+    background:var(--card);border:2px solid var(--ink);border-radius:var(--r);
+    box-shadow:5px 5px 0 var(--shadow);font-size:17px;
+    opacity:0;visibility:hidden;transform:translateY(-10px) scale(.985);transform-origin:top center;
+    transition:opacity .2s ease,transform .24s cubic-bezier(.2,.7,.2,1),visibility .24s;
+  }
+  .nav-js .tabs.open{opacity:1;visibility:visible;transform:none}
   .nav-js .tabs a{padding:12px 14px;border-radius:10px}
   .nav-js .tabs .github-link{margin:4px 0 0;text-align:center}
 }
 
 
 /* back to top */
-.back-to-top{position:fixed;right:24px;bottom:24px;z-index:45;padding:10px 16px;border:2px solid var(--ink);border-radius:99px;background:var(--card);color:var(--ink);font:600 14px var(--body);box-shadow:4px 4px 0 var(--shadow);cursor:pointer;transition:transform .12s,box-shadow .12s,background .15s,color .15s}
-.back-to-top:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow);background:var(--accent);color:#fff}
-.back-to-top[hidden]{display:none}
+.back-to-top{position:fixed;right:24px;bottom:24px;z-index:45;padding:10px 16px;border:2px solid var(--ink);border-radius:99px;background:var(--card);color:var(--ink);font:600 14px var(--body);box-shadow:4px 4px 0 var(--shadow);cursor:pointer;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .25s ease,visibility .25s,transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .12s,background .15s,color .15s}
+/* it rises in rather than appearing in one frame */
+.back-to-top.show{opacity:1;visibility:visible;transform:none}
+.back-to-top.show:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow);background:var(--accent);color:#fff}
 @media(max-width:760px){.back-to-top{right:16px;bottom:16px}}
 
 /* ---------- intro / landing page ---------- */
@@ -189,9 +424,15 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .wordmark:hover img{box-shadow:0 0 0 3px var(--accent-soft),0 0 18px var(--glow)}
 .sticker .photo{transition:transform .25s ease,box-shadow .3s ease}
 .sticker .photo:hover{transform:translate(-2px,-2px) scale(1.02);box-shadow:9px 9px 0 var(--shadow),0 0 26px var(--glow)}
+/* the sticker doubles as a fidget spinner (spin.js): only the picture turns,
+   the ink ring and its hard shadow stay put so the disc never looks warped */
+.sticker .photo{cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}
+.sticker .photo img{-webkit-user-drag:none;will-change:transform}
+.sticker .photo.spinning{cursor:grabbing}
+.sticker .photo.spun{transform:scale(1.04);box-shadow:9px 9px 0 var(--accent),0 0 34px var(--glow);cursor:default}
 .footer a{transition:color .15s ease,text-shadow .25s ease}
 .footer a:hover{text-shadow:0 0 12px var(--glow)}
-.recent li strong{transition:text-shadow .25s ease}
+.recent li strong{transition:text-shadow .25s ease,color .2s ease}
 .recent li a:hover strong{text-shadow:0 0 14px var(--glow)}
 .project .go{transition:text-shadow .25s ease}
 .project:hover .go{text-shadow:0 0 14px var(--glow)}
@@ -202,6 +443,9 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 /* click ripples drawn on a full-viewport canvas behind the content */
 .ripple-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:-1}
 body.intro-page{overflow-x:hidden}
+/* the intro scrolls to draw the squiggle, but never shows a scrollbar */
+html.intro-html{scrollbar-width:none;-ms-overflow-style:none}
+html.intro-html::-webkit-scrollbar{display:none}
 /* the scroll track is only added by JS, so a no-JS visit stays a single screen */
 body.intro-page.intro-scroll{height:220vh}
 .intro{position:fixed;inset:0;z-index:10;display:grid;place-items:center;overflow:hidden;background:var(--bg);transition:opacity .6s ease}
@@ -222,21 +466,184 @@ body.intro-page.intro-scroll{height:220vh}
 .intro-squiggle path{fill:none;stroke-width:5;stroke-linecap:round}
 .intro-squiggle .track{stroke:var(--line)}
 .intro-squiggle .draw{stroke:var(--accent)}
-.intro-sub{margin:0;font:13px/1.5 var(--mono);letter-spacing:.02em;color:var(--muted)}
 .intro-cue{display:flex;align-items:center;gap:9px;font:12.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);animation:cueBob 2.4s ease-in-out infinite}
 .intro-cue .arrow{font-size:15px}
 @keyframes cueBob{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(5px);opacity:1}}
-.intro-skip{font:600 14px var(--body);color:var(--muted);border-bottom:2px solid transparent;padding-bottom:1px;transition:color .15s,border-color .15s}
-.intro-skip:hover{color:var(--accent);border-color:var(--accent)}
+
+
+/* ---------- intro: the terminal ---------- */
+.intro-word{font-size:clamp(44px,8.5vw,92px)}
+.intro-squiggle{width:min(420px,72vw)}
+.intro-term{
+  width:min(560px,88vw);overflow:hidden;text-align:left;
+  background:var(--card);border:2px solid var(--ink);border-radius:14px;
+  box-shadow:7px 7px 0 var(--shadow);
+  transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s ease;
+}
+.intro-term:hover{transform:translateY(-2px);box-shadow:9px 9px 0 var(--accent)}
+.intro-term-bar{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:var(--accent-soft);border-bottom:1.5px solid var(--line);
+}
+.intro-dots{display:flex;gap:6px}
+.intro-dots i{width:9px;height:9px;border-radius:50%;background:var(--ink);opacity:.25}
+.intro-dots i:first-child{background:var(--accent);opacity:1}
+.intro-term-title{margin-left:auto;font:10.5px var(--mono);letter-spacing:.06em;color:var(--muted)}
+.intro-term-line{
+  margin:0;padding:16px 18px 3px;
+  font:13px/1.7 var(--mono);color:var(--ink);
+  white-space:nowrap;overflow-x:auto;scrollbar-width:none;
+}
+.intro-term-line::-webkit-scrollbar{display:none}
+.intro-prompt{color:var(--accent);margin-right:9px}
+.intro-term-cmd{white-space:pre}
+.intro-caret{
+  display:inline-block;width:7px;height:15px;margin-left:5px;vertical-align:-3px;
+  background:var(--accent);animation:caretBlink 1.1s steps(1) infinite;
+}
+.intro-term-note{margin:0;padding:0 18px 15px;font:11.5px/1.6 var(--mono);color:var(--muted)}
+.intro-tick{color:var(--accent);margin-right:6px}
+/* the install note only appears once the command has finished typing */
+.intro-js .intro-term-note{opacity:0;transform:translateY(4px);transition:opacity .35s ease,transform .35s cubic-bezier(.2,.7,.2,1)}
+.intro-js .intro-term.is-done .intro-term-note{opacity:1;transform:none}
+@keyframes caretBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+.intro-skip{
+  font:600 13px var(--body);color:var(--muted);
+  padding:7px 16px;border:1.5px solid var(--line);border-radius:99px;
+  transition:color .18s ease,border-color .18s ease,background .18s ease,transform .18s ease;
+}
+.intro-skip:hover{color:var(--accent);border-color:var(--accent);background:var(--card);transform:translateY(-1px)}
+
+/* output the install sequence appends to the terminal */
+.intro-term-log{margin:0;padding:0 18px 14px;display:flex;flex-direction:column;gap:3px}
+.intro-term-log:empty{display:none}
+/* a command run later is the same line as the install command above it, not
+   output: same size, same ink, same accent prompt and caret */
+.intro-term-log .intro-term-line{padding:0 0 3px;overflow:visible}
+.term-line{
+  margin:0;font:11.5px/1.6 var(--mono);color:var(--muted);white-space:nowrap;
+  animation:termIn .22s ease both;
+}
+.term-line .tick{color:var(--accent);margin-right:6px}
+.term-line.term-out{opacity:.75}
+@keyframes termIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+
+/* idle easter egg: bujijis falling from the roof (drawn on a canvas by bujiji.js) */
+.bujiji-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+
+@media(max-width:520px){
+  .intro-term-line{font-size:12px}
+  .intro-term-title{display:none}
+}
+
+
 
 /* inner pages fade in so arriving from the intro feels continuous */
 @media(prefers-reduced-motion:no-preference){
   body:not(.intro-page)>main{animation:pageIn .55s cubic-bezier(.2,.7,.2,1) both}
+  .site-header{animation:headerIn .45s ease both}
+  .footer{animation:footerIn .5s cubic-bezier(.2,.7,.2,1) .06s both}
 }
 @keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes headerIn{from{opacity:0}to{opacity:1}}
+@keyframes footerIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* Cross-document view transitions: the page you leave fades out while the
+   next one rises in, so navigation never hard-cuts. Browsers without them
+   ignore the at-rule and keep the entrance animation above. */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:pageOut .22s ease both}
+::view-transition-new(root){animation:pageEnter .32s cubic-bezier(.2,.7,.2,1) both}
+@keyframes pageOut{to{opacity:0;transform:translateY(-8px)}}
+@keyframes pageEnter{from{opacity:0;transform:translateY(14px)}}
 @media(prefers-reduced-motion:reduce){
-  .intro-bg .blob,.intro-letters span,.intro-cue{animation:none!important}
+  ::view-transition-old(root),::view-transition-new(root){animation:none}
+}
+/* when the browser runs a real transition, the per-element entrance above
+   would play a second time underneath it */
+@supports (view-transition-name: none){
+  .site-header,.footer,body:not(.intro-page)>main{animation:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .intro-bg .blob,.intro-letters span,.intro-cue,.intro-caret{animation:none!important}
   .intro-letters span{opacity:1;transform:none}
   .scrollbar-thumb path{animation:none!important}
   .cursor-glow{display:none!important}
+}
+
+/* ---------- desktop navbar: vertical cards hanging from the top edge ----------
+   Only above the mobile breakpoint; the hamburger menu keeps its own layout.
+   The tab box is lifted by the header's 22px padding and kept short, so the
+   cards start flush with the top edge and hang down without making the
+   header any taller. */
+@media(min-width:761px){
+  .tabs{
+    align-self:flex-start;align-items:flex-start;
+    height:34px;margin-top:-22px;   /* box lifts to the header top without growing the nav */
+    gap:6px;
+  }
+  .tabs a{
+    display:flex;align-items:center;justify-content:center;
+    min-width:72px;height:60px;padding:0 14px;white-space:nowrap;
+    background:var(--card);color:var(--ink);
+    border:2px solid var(--ink);border-top:0;
+    border-radius:0 0 12px 12px;
+    box-shadow:0 3px 0 var(--shadow);
+    font:600 15px/1 var(--body);
+    /* the card grows downward from the top edge, so it never detaches from it */
+    transition:height .22s cubic-bezier(.2,.7,.2,1),background .18s ease,
+               color .18s ease,box-shadow .22s ease,border-color .18s ease;
+  }
+  /* hover drops the card a little and lights it up */
+  .tabs a:hover{
+    height:66px;background:var(--accent-soft);
+    box-shadow:0 4px 0 var(--shadow),0 0 18px var(--glow);
+  }
+  /* the current page hangs lower and stays there */
+  .tabs a.active,
+  .tabs a.active:hover{
+    height:72px;
+    background:var(--ink);color:var(--bg);
+    box-shadow:0 5px 0 var(--shadow);
+  }
+  /* cards sit flush with the viewport top, so keep the focus ring inside */
+  .tabs a:focus-visible{outline-offset:-5px;border-radius:0 0 12px 12px}
+  .tabs .github-link{margin-left:8px;border:2px dashed var(--ink);border-top:0}
+  .tabs .github-link:hover{
+    background:var(--accent);color:#fff;border-color:var(--accent);
+    box-shadow:0 4px 0 var(--shadow),0 0 18px var(--glow);
+  }
+}
+@media(min-width:761px) and (prefers-reduced-motion:reduce){
+  .tabs a{transition:background .18s ease,color .18s ease}
+}
+
+/* ---------- micro-motion: anything that changes shape or colour eases ---------- */
+.chip{
+  transition:transform .18s cubic-bezier(.2,.7,.2,1),background .18s ease,
+             color .18s ease,border-color .18s ease;
+}
+.chip:hover{transform:translateY(-2px);background:var(--accent);color:#fff;border-color:var(--accent)}
+/* inside a tilted card the lift is kept, the tilt is not */
+.deck-card .chip:hover{transform:translateY(-2px) rotate(-1.5deg)}
+
+.recent li a span{transition:color .2s ease,transform .2s ease}
+.recent li a:hover span,.recent li a:focus-visible span{color:var(--ink);transform:translateX(-2px)}
+
+.facts div{transition:border-color .25s ease}
+.facts div:hover{border-color:var(--accent)}
+.facts dd{transition:color .2s ease}
+.facts div:hover dd{color:var(--accent)}
+
+.stack-panel li{transition:background .25s ease,border-color .25s ease}
+.stack-panel li:hover{background:var(--accent-soft);border-color:var(--accent)}
+
+.sticker .tag{
+  transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s ease,
+             background .2s ease,border-color .2s ease;
+}
+.sticker .tag:hover{
+  transform:rotate(0deg) translateY(-2px);
+  box-shadow:0 4px 0 var(--accent);background:var(--card);border-color:var(--accent);
 }
