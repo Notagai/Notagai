@@ -1,6 +1,7 @@
 /* The hero sticker is a fidget spinner. Drag the photo and it follows the
-   cursor around its centre, then coasts on friction when you let go. Two full
-   counterclockwise turns send you back to the intro (index.html).
+   cursor around its centre, then coasts on friction when you let go. The disc
+   carries a little weight at the bottom, so once the spin dies down it swings
+   back upright like a pendulum instead of resting at whatever angle it stopped.
    Only the picture inside the circular frame turns: the ink border and its hard
    shadow stay put, so the disc never looks warped while it spins. */
 (() => {
@@ -8,14 +9,15 @@
   const img = photo?.querySelector('img');
   if (!photo || !img) return;
 
-  const TURNS = Math.PI * 4;   // two counterclockwise revolutions
-  const DRAG = 2.4;            // how quickly a thrown sticker slows down
-  const MIN = 0.4;             // rad/s under which it counts as stopped
+  const DRAG = 1.5;            // how quickly a thrown sticker slows down
+  const GRAVITY = 12;          // pull of the weighted bottom, in rad/s²
+  const SWING = Math.PI / 2;   // past horizontal the weight still pulls full strength
+  const REST_V = 0.08;         // rad/s under which the swing counts as stopped
+  const REST_A = 0.02;         // rad from upright before it snaps home (~1°)
   const MAX_V = 22;            // rad/s ceiling, so a flick can't launch it
   const SMOOTH = 0.35;         // pointer velocity smoothing
 
   let angle = 0;               // radians, positive = clockwise on screen
-  let ccw = 0;                 // net counterclockwise travel, never negative
   let velocity = 0;            // rad/s, positive = clockwise
   let dragging = false;
   let id = null;
@@ -23,12 +25,12 @@
   let tPrev = 0;
   let raf = 0;
   let last = 0;
-  let leaving = false;
 
   img.draggable = false;
 
   // shortest way round, so crossing the atan2 seam never flips the wheel
   const wrap = d => Math.atan2(Math.sin(d), Math.cos(d));
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
   function pointerAngle(e) {
     const r = photo.getBoundingClientRect();
@@ -39,32 +41,26 @@
     img.style.transform = `rotate(${angle}rad)`;
   }
 
-  // d uses the css convention: positive turns clockwise, so counterclockwise
-  // travel is -d. Clockwise dragging can only unwind what was already wound.
+  // d uses the css convention: positive turns clockwise
   function turn(d) {
     angle += d;
-    ccw = Math.max(0, ccw - d);
     paint();
-    if (ccw >= TURNS) leave();
-  }
-
-  function leave() {
-    if (leaving) return;
-    leaving = true;
-    velocity = 0;
-    photo.classList.remove('spinning');
-    photo.classList.add('spun');
-    setTimeout(() => { location.href = 'index.html'; }, 460);
   }
 
   function coast(now) {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    turn(velocity * dt);
+    // the heavy side falls back to the bottom. Capping the swing at a quarter
+    // turn keeps a perfectly upside-down rest from becoming a dead spot.
+    const pull = Math.sin(clamp(wrap(angle), -SWING, SWING));
+    velocity += -GRAVITY * pull * dt;
     velocity *= Math.exp(-DRAG * dt);
-    if (Math.abs(velocity) < MIN) {
+    turn(velocity * dt);
+    if (Math.abs(velocity) < REST_V && Math.abs(wrap(angle)) < REST_A) {
       velocity = 0;
       raf = 0;
+      angle = 0;              // same orientation as any full turn, tidier number
+      paint();
       photo.classList.remove('spinning');
       return;
     }
@@ -76,13 +72,13 @@
     dragging = false;
     id = null;
     photo.classList.remove('spinning');
-    if (leaving || Math.abs(velocity) < MIN) return;
+    // always hand over to the physics: even a slow release lets the weight
+    // swing the sticker back upright
     last = performance.now();
     if (!raf) raf = requestAnimationFrame(coast);
   }
 
   photo.addEventListener('pointerdown', e => {
-    if (leaving) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     dragging = true;
     id = e.pointerId;

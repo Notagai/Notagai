@@ -429,7 +429,6 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .sticker .photo{cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}
 .sticker .photo img{-webkit-user-drag:none;will-change:transform}
 .sticker .photo.spinning{cursor:grabbing}
-.sticker .photo.spun{transform:scale(1.04);box-shadow:9px 9px 0 var(--accent),0 0 34px var(--glow);cursor:default}
 .footer a{transition:color .15s ease,text-shadow .25s ease}
 .footer a:hover{text-shadow:0 0 12px var(--glow)}
 .recent li strong{transition:text-shadow .25s ease,color .2s ease}
